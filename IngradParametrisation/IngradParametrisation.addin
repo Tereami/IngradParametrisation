@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">    
+    <Name>IngradParametrisation</Name>
+    <Assembly>
+        C:\Users\azuev\source\repos\IngradParametrisation\IngradParametrisation\bin\Debug\IngradParametrisation.dll    
+    </Assembly>
+    <ClientId>445c88ec-58a7-4c75-aefe-6d6bc15deead</ClientId>
+    <FullClassName>IngradParametrisation.App</FullClassName>
+    <VendorId>Weandrevit</VendorId>
+    <VendorDescription>weandrevit.ru</VendorDescription>
+  </AddIn>
+</RevitAddIns>

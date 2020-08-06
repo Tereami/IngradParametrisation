@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngradParametrisation", "IngradParametrisation\IngradParametrisation.csproj", "{445C88EC-58A7-4C75-AEFE-6D6BC15DEEAD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{445C88EC-58A7-4C75-AEFE-6D6BC15DEEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445C88EC-58A7-4C75-AEFE-6D6BC15DEEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445C88EC-58A7-4C75-AEFE-6D6BC15DEEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445C88EC-58A7-4C75-AEFE-6D6BC15DEEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B001D967-D4E9-4486-846F-CD29CA19CADC}
+	EndGlobalSection
+EndGlobal
