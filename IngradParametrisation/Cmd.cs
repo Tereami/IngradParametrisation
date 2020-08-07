@@ -85,7 +85,6 @@ namespace IngradParametrisation
             int count = 0;
 
 
-
             using (Transaction t = new Transaction(doc))
             {
                 t.Start("INGD Параметризация");
@@ -99,6 +98,7 @@ namespace IngradParametrisation
                         string mark = markParam.AsString();
 
                         Parameter ingdMarkParam = elem.LookupParameter(markParamName);
+                        
                         if (ingdMarkParam != null)
                         {
                             ingdMarkParam.Set(mark);
@@ -110,7 +110,7 @@ namespace IngradParametrisation
                             string markPrefix = splitmark[0];
                             if (!marksBase.ContainsKey(markPrefix))
                             {
-                                TaskDialog.Show("Ошибка", "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.IntegerValue.ToString());
+                                message = "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.IntegerValue.ToString();
                                 return Result.Failed;
                             }
                             string group = marksBase[markPrefix];

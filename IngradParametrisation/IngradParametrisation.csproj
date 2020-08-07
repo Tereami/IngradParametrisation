@@ -55,5 +55,11 @@
     <Compile Include="LevelUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IngradParametrisation.addin" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
