@@ -18,7 +18,6 @@ namespace IngradParametrisation
         {
             assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-
             string tabName = "Weandrevit";
             try { application.CreateRibbonTab(tabName); } catch { }
             string panelName = "INGRAD";

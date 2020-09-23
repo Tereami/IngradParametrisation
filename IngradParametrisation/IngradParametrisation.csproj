@@ -54,6 +54,7 @@
     <Compile Include="GeometryUtils.cs" />
     <Compile Include="LevelUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.txt" />

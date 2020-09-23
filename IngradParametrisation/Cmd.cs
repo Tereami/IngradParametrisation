@@ -26,8 +26,9 @@ namespace IngradParametrisation
             string heigthParamName = "INGD_Высота";
 
             Dictionary<string, string> marksBase = new Dictionary<string, string>();
-            string assemblyFolder = System.IO.Path.GetDirectoryName(App.assemblyPath);
-            string txtFile = System.IO.Path.Combine(assemblyFolder, "config.txt");
+
+            string txtFile = SettingsUtils.CheckOrCreateSettings();
+
             if(!System.IO.File.Exists(txtFile))
             {
                 message = "Не найден файл " + txtFile;
@@ -61,6 +62,8 @@ namespace IngradParametrisation
             allElems.AddRange(new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_StructuralColumns));
             allElems.AddRange(new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_StructuralFraming));
             allElems.AddRange(new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_StructuralFoundation));
+            allElems.AddRange(new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_Floors));
+            allElems.AddRange(new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_Walls));
 
             List<FamilyInstance> genericModels = new FilteredElementCollector(doc)
                 .OfClass(typeof(FamilyInstance))
