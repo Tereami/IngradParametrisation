@@ -1,10 +1,23 @@
-﻿using System;
+﻿#region License
+/*Данный код опубликован под лицензией Creative Commons Attribution-NonСommercial-ShareAlike.
+Разрешено использовать, распространять, изменять и брать данный код за основу для производных 
+в некоммерческих целях, при условии указания авторства и если производные лицензируются на тех же условиях.
+Код поставляется "как есть". Автор не несет ответственности за возможные последствия использования.
+Зуев Александр, 2021, все права защищены.
+This code is listed under the Creative Commons Attribution-NonСommercial-ShareAlike license.
+You may use, redistribute, remix, tweak, and build upon this work non-commercially,
+as long as you credit the author by linking back and license your new creations under the same terms.
+This code is provided 'as is'. Author disclaims any implied warranty.
+Zuev Aleksandr, 2021, all rigths reserved.*/
+#endregion
+#region usings
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB; //для работы с элементами модели Revit
-using Autodesk.Revit.UI; //для работы с элементами интерфейса
+using System.Diagnostics;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+#endregion
 
 namespace IngradParametrisation
 {
@@ -14,6 +27,9 @@ namespace IngradParametrisation
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Debug.Listeners.Clear();
+            Debug.Listeners.Add(new RbsLogger.Logger("IngdParametrisation"));
+
             string paramNameGroupConstr = "INGD_Группа конструкции";
             string floorNumberParamName = "INGD_Номер этажа";
             int floorTextPosition = 0;
@@ -41,6 +57,7 @@ namespace IngradParametrisation
                 string[] line = s.Split(';');
                 marksBase.Add(line[0], line[1]);
             }
+            Debug.WriteLine("Marks found: " + marksBase.Count.ToString());
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -86,7 +103,7 @@ namespace IngradParametrisation
                 .ToList();
 
             int count = 0;
-
+            Debug.WriteLine("Elems found: " + allElems.Count.ToString());
 
             using (Transaction t = new Transaction(doc))
             {
@@ -94,11 +111,13 @@ namespace IngradParametrisation
 
                 foreach (Element elem in allElems)
                 {
+                    Debug.WriteLine("Element id: " + elem.Id.IntegerValue.ToString());
                     Parameter markParam = elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK);
                     if (markParam == null) continue;
                     if (markParam.HasValue)
                     {
                         string mark = markParam.AsString();
+                        Debug.WriteLine("Mark = " + mark);
 
                         Parameter ingdMarkParam = elem.LookupParameter(markParamName);
                         
@@ -114,9 +133,11 @@ namespace IngradParametrisation
                             if (!marksBase.ContainsKey(markPrefix))
                             {
                                 message = "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.IntegerValue.ToString();
+                                Debug.WriteLine(message);
                                 return Result.Failed;
                             }
                             string group = marksBase[markPrefix];
+                            Debug.WriteLine("Group name: " + group);
                             Parameter groupParam = elem.LookupParameter(paramNameGroupConstr);
                             if (groupParam != null)
                             {
@@ -131,7 +152,11 @@ namespace IngradParametrisation
                     {
                         string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                         Parameter ingdFloor = elem.LookupParameter(floorNumberParamName);
-                        if (ingdFloor == null) continue;
+                        if (ingdFloor == null)
+                        {
+                            Debug.WriteLine("No parameter: " + floorNumberParamName);
+                            continue;
+                        }
                         ingdFloor.Set(floorNumber);
                     }
 
@@ -140,59 +165,92 @@ namespace IngradParametrisation
 
                 foreach (RoofBase roof in roofs)
                 {
+                    Debug.WriteLine("Roof id: " + roof.Id.IntegerValue.ToString());
                     string group = "Бетонная подготовка";
                     Parameter groupParam = roof.LookupParameter(paramNameGroupConstr);
                     if (groupParam != null)
                     {
                         groupParam.Set(group);
                     }
+                    else
+                    {
+                        Debug.WriteLine("No parameter: " + paramNameGroupConstr);
+                    }
+
                 }
 
                 foreach (Wall w in walls)
                 {
+                    Debug.WriteLine("Wall id: " + w.Id.IntegerValue.ToString());
                     Level baseLevel = doc.GetElement(w.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = w.LookupParameter(floorNumberParamName);
-                    if (ingdFloor == null) continue;
+                    if (ingdFloor == null)
+                    {
+                        Debug.WriteLine("No parameter: " + floorNumberParamName);
+                        continue;
+                    }
                     ingdFloor.Set(floorNumber);
 
                     double width = w.Width;
                     Parameter ingdWidth = w.LookupParameter(widthParamName);
-                    if (ingdWidth == null) continue;
+                    if (ingdWidth == null)
+                    {
+                        Debug.WriteLine("No parameter: " + widthParamName);
+                        continue;
+                    }
                     ingdWidth.Set(width);
 
                     double length = w.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsDouble();
                     Parameter ingdLength = w.LookupParameter(lengthParamName);
-                    if (ingdLength == null) continue;
+                    if (ingdLength == null)
+                    {
+                        Debug.WriteLine("No parameter: " + lengthParamName);
+                        continue;
+                    }
                     ingdLength.Set(length);
 
                     List<Solid> solids = GeometryUtils.GetSolidsFromElement(w);
                     XYZ[] maxminZ = GeometryUtils.GetMaxMinHeightPoints(solids);
                     double heigth = maxminZ[0].Z - maxminZ[1].Z;
                     Parameter ingdHeigth = w.LookupParameter(heigthParamName);
-                    if (ingdHeigth == null) continue;
+                    if (ingdHeigth == null)
+                    {
+                        Debug.WriteLine("No parameter: " + heigthParamName);
+                        continue;
+                    }
                     ingdHeigth.Set(heigth);
                 }
 
                 foreach (Floor f in floors)
                 {
+                    Debug.WriteLine("Floor id: " + f.Id.IntegerValue.ToString());
                     Level baseLevel = doc.GetElement(f.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = f.LookupParameter(floorNumberParamName);
-                    if (ingdFloor == null) continue;
+                    if (ingdFloor == null)
+                    {
+                        Debug.WriteLine("No parameter: " + floorNumberParamName);
+                        continue;
+                    }
                     ingdFloor.Set(floorNumber);
 
                     FloorType ft = f.FloorType;
 
                     double heigth = ft.get_Parameter(BuiltInParameter.FLOOR_ATTR_DEFAULT_THICKNESS_PARAM).AsDouble();
                     Parameter ingdHeigth = f.LookupParameter(heigthParamName);
-                    if (ingdHeigth == null) continue;
+                    if (ingdHeigth == null)
+                    {
+                        Debug.WriteLine("No parameter: " + heigthParamName);
+                        continue;
+                    }
                     ingdHeigth.Set(heigth);
                 }
 
                 t.Commit();
             }
 
+            Debug.WriteLine("Elements are done: " + count.ToString());
             TaskDialog.Show("Отчет", "Обработано элементов: " + count.ToString());
             return Result.Succeeded;
         }

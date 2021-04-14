@@ -1,10 +1,21 @@
-﻿using System;
+﻿#region License
+/*Данный код опубликован под лицензией Creative Commons Attribution-NonСommercial-ShareAlike.
+Разрешено использовать, распространять, изменять и брать данный код за основу для производных 
+в некоммерческих целях, при условии указания авторства и если производные лицензируются на тех же условиях.
+Код поставляется "как есть". Автор не несет ответственности за возможные последствия использования.
+Зуев Александр, 2021, все права защищены.
+This code is listed under the Creative Commons Attribution-NonСommercial-ShareAlike license.
+You may use, redistribute, remix, tweak, and build upon this work non-commercially,
+as long as you credit the author by linking back and license your new creations under the same terms.
+This code is provided 'as is'. Author disclaims any implied warranty.
+Zuev Aleksandr, 2021, all rigths reserved.*/
+#endregion
+#region usings
+using System;
+using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+#endregion
 
 namespace IngradParametrisation
 {
@@ -53,6 +64,7 @@ namespace IngradParametrisation
 
         public static List<Solid> GetSolidsFromElement(GeometryElement geoElem)
         {
+            Debug.WriteLine("Get solids from geoelem");
             List<Solid> solids = new List<Solid>();
 
             foreach (GeometryObject geoObj in geoElem)
@@ -73,6 +85,7 @@ namespace IngradParametrisation
                     solids.AddRange(solids2);
                 }
             }
+            Debug.WriteLine("Solids found: " + solids.Count.ToString());
             return solids;
         }
 
