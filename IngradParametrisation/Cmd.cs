@@ -111,7 +111,7 @@ namespace IngradParametrisation
 
                 foreach (Element elem in allElems)
                 {
-                    Debug.WriteLine("Element id: " + elem.Id.IntegerValue.ToString());
+                    Debug.WriteLine("Element id: " + elem.Id.GetElementIdValue().ToString());
                     Parameter markParam = elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK);
                     if (markParam == null) continue;
                     if (markParam.HasValue)
@@ -132,7 +132,7 @@ namespace IngradParametrisation
                             string markPrefix = splitmark[0];
                             if (!marksBase.ContainsKey(markPrefix))
                             {
-                                message = "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.IntegerValue.ToString();
+                                message = "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.GetElementIdValue().ToString();
                                 Debug.WriteLine(message);
                                 return Result.Failed;
                             }
@@ -165,7 +165,7 @@ namespace IngradParametrisation
 
                 foreach (RoofBase roof in roofs)
                 {
-                    Debug.WriteLine("Roof id: " + roof.Id.IntegerValue.ToString());
+                    Debug.WriteLine("Roof id: " + roof.Id.GetElementIdValue().ToString());
                     string group = "Бетонная подготовка";
                     Parameter groupParam = roof.LookupParameter(paramNameGroupConstr);
                     if (groupParam != null)
@@ -181,7 +181,7 @@ namespace IngradParametrisation
 
                 foreach (Wall w in walls)
                 {
-                    Debug.WriteLine("Wall id: " + w.Id.IntegerValue.ToString());
+                    Debug.WriteLine("Wall id: " + w.Id.GetElementIdValue().ToString());
                     Level baseLevel = doc.GetElement(w.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = w.LookupParameter(floorNumberParamName);
@@ -224,7 +224,7 @@ namespace IngradParametrisation
 
                 foreach (Floor f in floors)
                 {
-                    Debug.WriteLine("Floor id: " + f.Id.IntegerValue.ToString());
+                    Debug.WriteLine("Floor id: " + f.Id.GetElementIdValue().ToString());
                     Level baseLevel = doc.GetElement(f.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = f.LookupParameter(floorNumberParamName);

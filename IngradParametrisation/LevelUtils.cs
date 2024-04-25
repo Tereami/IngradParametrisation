@@ -38,7 +38,7 @@ namespace IngradParametrisation
         }
         public static Level GetLevelOfElement(Element elem, Document doc)
         {
-            Debug.WriteLine("Try to get level of elem: " + elem.Id.IntegerValue.ToString());
+            Debug.WriteLine("Try to get level of elem: " + elem.Id.GetElementIdValue().ToString());
             ElementId levId = elem.LevelId;
             if (levId == ElementId.InvalidElementId)
             {
@@ -74,9 +74,9 @@ namespace IngradParametrisation
             if (levId == ElementId.InvalidElementId)
             {
                 Debug.WriteLine("Unable to get level");
-                throw new Exception("Не удалось получить уровень у элемента " + elem.Id.IntegerValue.ToString());
+                throw new Exception("Не удалось получить уровень у элемента " + elem.Id.GetElementIdValue().ToString());
             }
-            Debug.WriteLine("Level id: " + levId.IntegerValue.ToString());
+            Debug.WriteLine("Level id: " + levId.GetElementIdValue().ToString());
             Level lev = doc.GetElement(levId) as Level;
             return lev;
         }
