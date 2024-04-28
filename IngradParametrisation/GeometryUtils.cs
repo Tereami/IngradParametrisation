@@ -64,7 +64,7 @@ namespace IngradParametrisation
 
         public static List<Solid> GetSolidsFromElement(GeometryElement geoElem)
         {
-            Debug.WriteLine("Get solids from geoelem");
+            Trace.WriteLine("Get solids from geoelem");
             List<Solid> solids = new List<Solid>();
 
             foreach (GeometryObject geoObj in geoElem)
@@ -85,7 +85,7 @@ namespace IngradParametrisation
                     solids.AddRange(solids2);
                 }
             }
-            Debug.WriteLine("Solids found: " + solids.Count.ToString());
+            Trace.WriteLine("Solids found: " + solids.Count.ToString());
             return solids;
         }
 

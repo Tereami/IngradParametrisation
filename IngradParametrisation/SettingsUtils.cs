@@ -23,42 +23,42 @@ namespace IngradParametrisation
 
         public static string CheckOrCreateSettings()
         {
-            Debug.WriteLine("Start read settings");
+            Trace.WriteLine("Start read settings");
             string appdataFolder =
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string configPath = Path.Combine(appdataFolder, "bim-starter", "config.ini");
-            Debug.WriteLine("Check central config file: " + configPath);
+            Trace.WriteLine("Check central config file: " + configPath);
             string serverSettingsPath = "";
             if (File.Exists(configPath))
             {
                 serverSettingsPath = File.ReadAllLines(configPath)[0];
-                Debug.WriteLine("Path to shared folder: " + serverSettingsPath);
+                Trace.WriteLine("Path to shared folder: " + serverSettingsPath);
             }
             else
             {
                 string sourceTxtFile = getLocalConfigFile();
-                Debug.WriteLine("No shared folder, use local file: " + sourceTxtFile);
+                Trace.WriteLine("No shared folder, use local file: " + sourceTxtFile);
                 return sourceTxtFile;
             }
             string ingdConfigFile = Path.Combine(serverSettingsPath, configFileName);
-            Debug.WriteLine("Path to shared config file: " + ingdConfigFile);
+            Trace.WriteLine("Path to shared config file: " + ingdConfigFile);
             if (!File.Exists(ingdConfigFile))
             {
-                Debug.WriteLine("Shared config file not found!");
+                Trace.WriteLine("Shared config file not found!");
                 string sourceTxtFile = getLocalConfigFile();
                 try
                 {
                     File.Copy(sourceTxtFile, ingdConfigFile);
-                    Debug.WriteLine("New shared config file created by local: " + sourceTxtFile);
+                    Trace.WriteLine("New shared config file created by local: " + sourceTxtFile);
                 }
                 catch(Exception ex)
                 {
                     string msg = "Не удалось скопировать " + sourceTxtFile + " в " + ingdConfigFile + ": " + ex.Message;
-                    Debug.WriteLine(msg);
+                    Trace.WriteLine(msg);
                     throw new Exception(msg);
                 }
             }
-            Debug.WriteLine("Final ingd config file: " + ingdConfigFile);
+            Trace.WriteLine("Final ingd config file: " + ingdConfigFile);
             return ingdConfigFile;
         }
 
@@ -68,7 +68,7 @@ namespace IngradParametrisation
             string sourceTxtFile = Path.Combine(assemblyFolder, configFileName);
             if (!System.IO.File.Exists(sourceTxtFile))
             {
-                Debug.WriteLine("File not found: " + sourceTxtFile);
+                Trace.WriteLine("File not found: " + sourceTxtFile);
                 throw new Exception("Не найден файл " + sourceTxtFile);
             }
             return sourceTxtFile;

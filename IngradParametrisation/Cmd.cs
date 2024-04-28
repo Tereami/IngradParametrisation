@@ -27,8 +27,8 @@ namespace IngradParametrisation
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("IngdParametrisation"));
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(new RbsLogger.Logger("IngdParametrisation"));
 
             string paramNameGroupConstr = "INGD_Группа конструкции";
             string floorNumberParamName = "INGD_Номер этажа";
@@ -57,7 +57,7 @@ namespace IngradParametrisation
                 string[] line = s.Split(';');
                 marksBase.Add(line[0], line[1]);
             }
-            Debug.WriteLine("Marks found: " + marksBase.Count.ToString());
+            Trace.WriteLine("Marks found: " + marksBase.Count.ToString());
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -103,7 +103,7 @@ namespace IngradParametrisation
                 .ToList();
 
             int count = 0;
-            Debug.WriteLine("Elems found: " + allElems.Count.ToString());
+            Trace.WriteLine("Elems found: " + allElems.Count.ToString());
 
             using (Transaction t = new Transaction(doc))
             {
@@ -111,13 +111,13 @@ namespace IngradParametrisation
 
                 foreach (Element elem in allElems)
                 {
-                    Debug.WriteLine("Element id: " + elem.Id.GetElementIdValue().ToString());
+                    Trace.WriteLine("Element id: " + elem.Id.GetElementIdValue().ToString());
                     Parameter markParam = elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK);
                     if (markParam == null) continue;
                     if (markParam.HasValue)
                     {
                         string mark = markParam.AsString();
-                        Debug.WriteLine("Mark = " + mark);
+                        Trace.WriteLine("Mark = " + mark);
 
                         Parameter ingdMarkParam = elem.LookupParameter(markParamName);
                         
@@ -133,11 +133,11 @@ namespace IngradParametrisation
                             if (!marksBase.ContainsKey(markPrefix))
                             {
                                 message = "Недопустимый префикс марки " + markPrefix + " у элемента id " + elem.Id.GetElementIdValue().ToString();
-                                Debug.WriteLine(message);
+                                Trace.WriteLine(message);
                                 return Result.Failed;
                             }
                             string group = marksBase[markPrefix];
-                            Debug.WriteLine("Group name: " + group);
+                            Trace.WriteLine("Group name: " + group);
                             Parameter groupParam = elem.LookupParameter(paramNameGroupConstr);
                             if (groupParam != null)
                             {
@@ -154,7 +154,7 @@ namespace IngradParametrisation
                         Parameter ingdFloor = elem.LookupParameter(floorNumberParamName);
                         if (ingdFloor == null)
                         {
-                            Debug.WriteLine("No parameter: " + floorNumberParamName);
+                            Trace.WriteLine("No parameter: " + floorNumberParamName);
                             continue;
                         }
                         ingdFloor.Set(floorNumber);
@@ -165,7 +165,7 @@ namespace IngradParametrisation
 
                 foreach (RoofBase roof in roofs)
                 {
-                    Debug.WriteLine("Roof id: " + roof.Id.GetElementIdValue().ToString());
+                    Trace.WriteLine("Roof id: " + roof.Id.GetElementIdValue().ToString());
                     string group = "Бетонная подготовка";
                     Parameter groupParam = roof.LookupParameter(paramNameGroupConstr);
                     if (groupParam != null)
@@ -174,20 +174,20 @@ namespace IngradParametrisation
                     }
                     else
                     {
-                        Debug.WriteLine("No parameter: " + paramNameGroupConstr);
+                        Trace.WriteLine("No parameter: " + paramNameGroupConstr);
                     }
 
                 }
 
                 foreach (Wall w in walls)
                 {
-                    Debug.WriteLine("Wall id: " + w.Id.GetElementIdValue().ToString());
+                    Trace.WriteLine("Wall id: " + w.Id.GetElementIdValue().ToString());
                     Level baseLevel = doc.GetElement(w.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = w.LookupParameter(floorNumberParamName);
                     if (ingdFloor == null)
                     {
-                        Debug.WriteLine("No parameter: " + floorNumberParamName);
+                        Trace.WriteLine("No parameter: " + floorNumberParamName);
                         continue;
                     }
                     ingdFloor.Set(floorNumber);
@@ -196,7 +196,7 @@ namespace IngradParametrisation
                     Parameter ingdWidth = w.LookupParameter(widthParamName);
                     if (ingdWidth == null)
                     {
-                        Debug.WriteLine("No parameter: " + widthParamName);
+                        Trace.WriteLine("No parameter: " + widthParamName);
                         continue;
                     }
                     ingdWidth.Set(width);
@@ -205,7 +205,7 @@ namespace IngradParametrisation
                     Parameter ingdLength = w.LookupParameter(lengthParamName);
                     if (ingdLength == null)
                     {
-                        Debug.WriteLine("No parameter: " + lengthParamName);
+                        Trace.WriteLine("No parameter: " + lengthParamName);
                         continue;
                     }
                     ingdLength.Set(length);
@@ -216,7 +216,7 @@ namespace IngradParametrisation
                     Parameter ingdHeigth = w.LookupParameter(heigthParamName);
                     if (ingdHeigth == null)
                     {
-                        Debug.WriteLine("No parameter: " + heigthParamName);
+                        Trace.WriteLine("No parameter: " + heigthParamName);
                         continue;
                     }
                     ingdHeigth.Set(heigth);
@@ -224,13 +224,13 @@ namespace IngradParametrisation
 
                 foreach (Floor f in floors)
                 {
-                    Debug.WriteLine("Floor id: " + f.Id.GetElementIdValue().ToString());
+                    Trace.WriteLine("Floor id: " + f.Id.GetElementIdValue().ToString());
                     Level baseLevel = doc.GetElement(f.LevelId) as Level;
                     string floorNumber = LevelUtils.GetFloorNumberByLevel(baseLevel, floorTextPosition);
                     Parameter ingdFloor = f.LookupParameter(floorNumberParamName);
                     if (ingdFloor == null)
                     {
-                        Debug.WriteLine("No parameter: " + floorNumberParamName);
+                        Trace.WriteLine("No parameter: " + floorNumberParamName);
                         continue;
                     }
                     ingdFloor.Set(floorNumber);
@@ -241,7 +241,7 @@ namespace IngradParametrisation
                     Parameter ingdHeigth = f.LookupParameter(heigthParamName);
                     if (ingdHeigth == null)
                     {
-                        Debug.WriteLine("No parameter: " + heigthParamName);
+                        Trace.WriteLine("No parameter: " + heigthParamName);
                         continue;
                     }
                     ingdHeigth.Set(heigth);
@@ -250,7 +250,7 @@ namespace IngradParametrisation
                 t.Commit();
             }
 
-            Debug.WriteLine("Elements are done: " + count.ToString());
+            Trace.WriteLine("Elements are done: " + count.ToString());
             TaskDialog.Show("Отчет", "Обработано элементов: " + count.ToString());
             return Result.Succeeded;
         }

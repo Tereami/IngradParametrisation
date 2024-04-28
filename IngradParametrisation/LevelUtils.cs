@@ -25,20 +25,20 @@ namespace IngradParametrisation
         public static string GetFloorNumberByLevel(Level lev, int floorTextPosition)
         {
             string levname = lev.Name;
-            Debug.WriteLine("Try to get floor number by level name: " + levname);
+            Trace.WriteLine("Try to get floor number by level name: " + levname);
             string[] splitname = levname.Split(' ');
             if (splitname.Length < 2)
             {
-                Debug.WriteLine("Incorrect level name: " + levname);
+                Trace.WriteLine("Incorrect level name: " + levname);
                 throw new Exception("Некорректное имя уровня: " + levname);
             }
             string floorNumber = splitname[floorTextPosition];
-            Debug.WriteLine("Floor number: " + floorNumber);
+            Trace.WriteLine("Floor number: " + floorNumber);
             return floorNumber;
         }
         public static Level GetLevelOfElement(Element elem, Document doc)
         {
-            Debug.WriteLine("Try to get level of elem: " + elem.Id.GetElementIdValue().ToString());
+            Trace.WriteLine("Try to get level of elem: " + elem.Id.GetElementIdValue().ToString());
             ElementId levId = elem.LevelId;
             if (levId == ElementId.InvalidElementId)
             {
@@ -63,7 +63,7 @@ namespace IngradParametrisation
 
             if (levId == ElementId.InvalidElementId)
             {
-                Debug.WriteLine("Try to get level by geometry");
+                Trace.WriteLine("Try to get level by geometry");
                 List<Solid> solids = GeometryUtils.GetSolidsFromElement(elem);
                 if (solids.Count == 0) return null;
                 XYZ[] maxmin = GeometryUtils.GetMaxMinHeightPoints(solids);
@@ -73,10 +73,10 @@ namespace IngradParametrisation
 
             if (levId == ElementId.InvalidElementId)
             {
-                Debug.WriteLine("Unable to get level");
+                Trace.WriteLine("Unable to get level");
                 throw new Exception("Не удалось получить уровень у элемента " + elem.Id.GetElementIdValue().ToString());
             }
-            Debug.WriteLine("Level id: " + levId.GetElementIdValue().ToString());
+            Trace.WriteLine("Level id: " + levId.GetElementIdValue().ToString());
             Level lev = doc.GetElement(levId) as Level;
             return lev;
         }
